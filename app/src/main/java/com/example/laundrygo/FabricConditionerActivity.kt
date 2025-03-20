@@ -12,15 +12,18 @@ import androidx.appcompat.app.AppCompatActivity
 class FabricConditionerActivity : AppCompatActivity() {
     private var selectedSoap: String? = null
     private var soapQuantity: Int = 0
+    private var selectedType: String? = null  // Declare selectedType
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_fabric_conditioner)
 
-        // Retrieve selected detergent & quantity as INT
+        // Retrieve selected detergent, quantity, and service type (wash, handwash, fold, etc.)
         selectedSoap = intent.getStringExtra("selectedSoap")
         soapQuantity = intent.getIntExtra("soapQuantity", 0)
+        selectedType = intent.getStringExtra("selectedType")  // Retrieve selectedType
 
+        // Define fabric conditioner options with their respective IDs
         val fabricOptions = mapOf(
             R.id.fabric1 to "DOWNY",
             R.id.fabric2 to "CHAMPION",
@@ -28,29 +31,32 @@ class FabricConditionerActivity : AppCompatActivity() {
             R.id.fabric4 to "SURF"
         )
 
+        // Set listeners for fabric conditioner options
         fabricOptions.forEach { (viewId, fabricName) ->
             findViewById<ImageView>(viewId).setOnClickListener {
                 showQuantityDialog(fabricName)
             }
         }
 
-        // Handle back button click
+        // Handle back button click to return to the previous activity
         findViewById<ImageView>(R.id.backButton).setOnClickListener {
             onBackPressed()
         }
 
-        // Handle continue button click
+        // Handle the continue button click to proceed to BleachActivity
         findViewById<TextView>(R.id.buttonContinue).setOnClickListener {
-            // Assuming you want to go to the BleachActivity even if no fabric conditioner is selected
+            // Go to BleachActivity if no fabric conditioner selection is made
             goToBleachActivity()
         }
     }
 
+    // Function to show a dialog for selecting fabric conditioner quantity
     private fun showQuantityDialog(fabricName: String) {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_quantity, null)
         val quantityTextView = dialogView.findViewById<TextView>(R.id.quantityTextView)
         var quantity = 1 // Default quantity
 
+        // Buttons for adjusting the quantity
         val decrementButton = dialogView.findViewById<Button>(R.id.buttonDecrement)
         val incrementButton = dialogView.findViewById<Button>(R.id.buttonIncrement)
         val confirmButton = dialogView.findViewById<Button>(R.id.buttonConfirm)
@@ -62,8 +68,10 @@ class FabricConditionerActivity : AppCompatActivity() {
             .create()
         dialog.show()
 
+        // Update the quantity displayed in the dialog
         quantityTextView.text = quantity.toString()
 
+        // Decrement quantity
         decrementButton.setOnClickListener {
             if (quantity > 1) {
                 quantity--
@@ -71,36 +79,44 @@ class FabricConditionerActivity : AppCompatActivity() {
             }
         }
 
+        // Increment quantity
         incrementButton.setOnClickListener {
             quantity++
             quantityTextView.text = quantity.toString()
         }
 
+        // Confirm the selection and navigate to BleachActivity
         confirmButton.setOnClickListener {
             goToSummaryActivity(fabricName, quantity)
             dialog.dismiss()
         }
 
+        // Close the dialog without selecting
         cancelButton.setOnClickListener {
             dialog.dismiss()
         }
     }
 
+    // Function to navigate to BleachActivity with the selected fabric details
     private fun goToSummaryActivity(fabricName: String, fabricQuantity: Int) {
         val intent = Intent(this, BleachActivity::class.java).apply {
+            // Pass the selected soap, soap quantity, fabric conditioner, and fabric quantity
             putExtra("selectedSoap", selectedSoap)
             putExtra("soapQuantity", soapQuantity)
             putExtra("fabricName", fabricName)
             putExtra("fabricQuantity", fabricQuantity)
+            putExtra("selectedType", selectedType)  // Pass selectedType to BleachActivity
         }
         startActivity(intent)
     }
 
+    // Function to navigate directly to BleachActivity if continue is clicked without fabric conditioner selection
     private fun goToBleachActivity() {
-        // Navigate directly to BleachActivity if "Continue" is clicked without a fabric conditioner selection
+        // Navigate directly to BleachActivity with soap, soap quantity, and selectedType
         val intent = Intent(this, BleachActivity::class.java).apply {
             putExtra("selectedSoap", selectedSoap)
             putExtra("soapQuantity", soapQuantity)
+            putExtra("selectedType", selectedType)  // Pass selectedType to BleachActivity
         }
         startActivity(intent)
     }

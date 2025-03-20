@@ -25,7 +25,7 @@
             android:name=".SummaryActivity"
             android:exported="false" />
         <activity
-            android:name=".PickupActivity"
+            android:name=".pickupActivity"
             android:exported="false" />
         <activity
             android:name=".DeliveryActivity"

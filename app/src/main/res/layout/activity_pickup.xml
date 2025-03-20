@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PickupActivity">
+    tools:context=".pickupActivity">
 
     <!-- Back Button -->
     <ImageView
@@ -190,7 +190,7 @@
         tools:ignore="TouchTargetSizeCheck" />
 
     <TimePicker
-        android:id="@+id/timePicker"
+        android:id="@+id/etTime"
         android:layout_width="250dp"
         android:layout_height="100dp"
         android:timePickerMode="spinner"

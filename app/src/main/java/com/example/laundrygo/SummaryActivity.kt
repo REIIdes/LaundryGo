@@ -8,6 +8,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 
 class SummaryActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_summary)
@@ -17,6 +18,7 @@ class SummaryActivity : AppCompatActivity() {
         val selectedFabricTextView = findViewById<TextView>(R.id.selectedFabricTextView)
         val selectedBleachTextView = findViewById<TextView>(R.id.selectedBleachTextView)
         val totalPriceTextView = findViewById<TextView>(R.id.totalPriceTextView)
+        val selectedTypeTextView = findViewById<TextView>(R.id.selectedType)
         val cancelButton = findViewById<Button>(R.id.cancelButton)
         val confirmButton = findViewById<Button>(R.id.confirmButton)
 
@@ -27,11 +29,13 @@ class SummaryActivity : AppCompatActivity() {
         val fabricQuantity = intent.getIntExtra("fabricQuantity", 0)
         val bleachName = intent.getStringExtra("bleachName") ?: "N/A"
         val bleachQuantity = intent.getIntExtra("bleachQuantity", 0)
+        val selectedType = intent.getStringExtra("selectedType") ?: "N/A"
 
         // Debugging logs (remove after testing)
         println("DEBUG: Selected Soap = $selectedSoap, Quantity = $soapQuantity")
         println("DEBUG: Selected Fabric = $fabricName, Quantity = $fabricQuantity")
         println("DEBUG: Selected Bleach = $bleachName, Quantity = $bleachQuantity")
+        println("DEBUG: Selected Type = $selectedType") // Log selected type
 
         // Define detergent prices
         val detergentPrices = mapOf(
@@ -60,14 +64,15 @@ class SummaryActivity : AppCompatActivity() {
         val fabricPrice = fabricPrices[fabricName.uppercase()] ?: 0
         val bleachPrice = bleachPrices[bleachName.uppercase()] ?: 0
 
-        // Calculate total
+        // Calculate total cost
         val totalPrice = (detergentPrice * soapQuantity) + (fabricPrice * fabricQuantity) + (bleachPrice * bleachQuantity)
 
-        // Update UI
+        // Update UI with selected items and their quantities
         selectedSoapTextView.text = "Detergent: $selectedSoap x$soapQuantity (PHP ${detergentPrice * soapQuantity})"
         selectedFabricTextView.text = "Fabric Softener: $fabricName x$fabricQuantity (PHP ${fabricPrice * fabricQuantity})"
         selectedBleachTextView.text = "Bleach: $bleachName x$bleachQuantity (PHP ${bleachPrice * bleachQuantity})"
         totalPriceTextView.text = "Total Price: PHP $totalPrice"
+        selectedTypeTextView.text = "Selected Type: $selectedType"  // Display the selected type
 
         // Confirm Button -> Navigates to ChoiceActivity
         confirmButton.setOnClickListener {
@@ -83,14 +88,6 @@ class SummaryActivity : AppCompatActivity() {
         }
     }
 
-    // Function to navigate back to HomeFragment
-    private fun navigateTohome() {
-        val intent = Intent(this, home::class.java) // Ensure `home.kt` is an Activity
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
-        finish() // Close the current activity
-    }
-
     // Function to show cancel confirmation dialog
     private fun showCancelDialog() {
         val builder = AlertDialog.Builder(this)
@@ -99,7 +96,7 @@ class SummaryActivity : AppCompatActivity() {
 
         builder.setPositiveButton("Yes") { _, _ ->
             clearSelections()
-            navigateTohome() // Calls the function to go to `home.kt`
+            navigateToHome() // Calls the function to go to HomeActivity
         }
 
         builder.setNegativeButton("Back") { dialog, _ ->
@@ -112,5 +109,13 @@ class SummaryActivity : AppCompatActivity() {
     // Function to clear selections (if needed)
     private fun clearSelections() {
         // Implement logic to reset selections (if needed)
+    }
+
+    // Function to navigate back to HomeActivity
+    private fun navigateToHome() {
+        val intent = Intent(this, home::class.java) // Correct class name (HomeActivity instead of 'home')
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+        finish() // Close the current activity
     }
 }

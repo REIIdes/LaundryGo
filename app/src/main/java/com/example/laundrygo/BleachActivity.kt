@@ -16,29 +16,37 @@ class BleachActivity : AppCompatActivity() {
     private var fabricQuantity: Int = 0
     private var selectedSoap: String? = null
     private var soapQuantity: Int = 0
+    private var selectedType: String? = null // Added selectedType
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bleach)
 
+        // Retrieve all relevant data from the previous activity
         fabricName = intent.getStringExtra("fabricName")
         fabricQuantity = intent.getIntExtra("fabricQuantity", 0)
         selectedSoap = intent.getStringExtra("selectedSoap")
         soapQuantity = intent.getIntExtra("soapQuantity", 0)
+        selectedType = intent.getStringExtra("selectedType") // Get selected type
 
+        // Initialize UI components
         val fabric1: LinearLayout = findViewById(R.id.fabric1)
         val fabric2: LinearLayout = findViewById(R.id.fabric2)
         val backButton: ImageView = findViewById(R.id.backButton)
         val buttonContinue: TextView = findViewById(R.id.buttonContinue)
 
+        // Set click listeners for fabric options
         fabric1.setOnClickListener { showQuantityDialog("COLOR SAFE ZONROX") }
         fabric2.setOnClickListener { showQuantityDialog("ORIGINAL ZONROX") }
 
+        // Handle the back button click
         backButton.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
+        // Handle continue button click
         buttonContinue.setOnClickListener { goToSummaryActivity(null, 0) }
     }
 
+    // Method to show the quantity dialog for bleach
     private fun showQuantityDialog(bleachName: String) {
         val inflater = LayoutInflater.from(this)
         val dialogView = inflater.inflate(R.layout.dialog_quantity, null)
@@ -70,24 +78,33 @@ class BleachActivity : AppCompatActivity() {
             quantityTextView.text = quantity.toString()
         }
 
+        // On confirm button click, pass the bleach data to the summary activity
         confirmButton.setOnClickListener {
             goToSummaryActivity(bleachName, quantity)
             dialog.dismiss()
         }
 
+        // On cancel button click, dismiss the dialog
         cancelButton.setOnClickListener { dialog.dismiss() }
     }
 
+    // Method to navigate to the SummaryActivity and pass all data
     private fun goToSummaryActivity(bleachName: String?, bleachQuantity: Int) {
         val intent = Intent(this, SummaryActivity::class.java).apply {
+            // Pass selected soap, soap quantity, fabric, and fabric quantity
             putExtra("selectedSoap", selectedSoap)
             putExtra("soapQuantity", soapQuantity)
             putExtra("fabricName", fabricName)
             putExtra("fabricQuantity", fabricQuantity)
+
+            // Pass bleach name and quantity if selected
             bleachName?.let {
                 putExtra("bleachName", bleachName)
                 putExtra("bleachQuantity", bleachQuantity)
             }
+
+            // Pass selected service type (wash, fold, handwash, etc.)
+            putExtra("selectedType", selectedType)
         }
         startActivity(intent)
     }

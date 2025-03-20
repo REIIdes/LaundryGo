@@ -12,10 +12,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="30dp"
         app:cardBackgroundColor="@android:color/white"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="7dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="8dp"
         android:padding="16dp">
 
         <LinearLayout
@@ -23,38 +23,55 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Display selected detergent -->
             <TextView
                 android:id="@+id/selectedSoapTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Detergent: "
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingBottom="8dp" />
 
+            <!-- Display selected fabric softener -->
             <TextView
                 android:id="@+id/selectedFabricTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Fabric Softener: "
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 android:paddingBottom="8dp" />
 
+            <!-- Display selected bleach -->
             <TextView
                 android:id="@+id/selectedBleachTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Bleach: "
-                android:textSize="20sp"
-                android:textStyle="bold"/>
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingBottom="8dp" />
 
+            <!-- Display selected type (e.g., Wash, Handwash, Fold) -->
+            <TextView
+                android:id="@+id/selectedType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Selected Service: "
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:paddingBottom="8dp" />
+
+
+
+            <!-- Display total price -->
             <TextView
                 android:id="@+id/totalPriceTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Total Price: "
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -64,19 +81,23 @@
     <Button
         android:id="@+id/confirmButton"
         android:layout_width="235dp"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:backgroundTint="#8D011C"
         android:text="Confirm"
         android:textColor="@android:color/white"
-        android:layout_marginBottom="10dp" />
+        android:textSize="16sp"
+        android:layout_marginBottom="15dp"
+        android:layout_gravity="center"/>
 
     <!-- Cancel Button -->
     <Button
         android:id="@+id/cancelButton"
         android:layout_width="235dp"
-        android:layout_height="65dp"
+        android:layout_height="55dp"
         android:backgroundTint="#8D011C"
         android:text="Cancel"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:layout_gravity="center"/>
 
 </LinearLayout>
